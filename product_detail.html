@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Product_Detail</title>
+    <style>
+        :root {
+            --primary-color: #867526;
+            --secondary-color: #f8f9fa;
+            --accent-color: #ff6b6b;
+            --text-dark: #333;
+            --text-light: #fff;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--secondary-color);
+            padding: 20px;
+        }
+
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--primary-color);
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .header-bar h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            flex: 1;
+            text-align: center;
+        }
+
+        .header-bar a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 1.3rem;
+            margin: 0 8px;
+            transition: transform 0.2s;
+        }
+
+        .header-bar a:hover {
+            transform: scale(1.2);
+        }
+
+        #product-detail {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 80vh;
+        }
+
+        .product_info {
+            text-align: center;
+        }
+
+        .sizes button {
+            margin: 5px;
+            padding: 8px 15px;
+            border: 1px solid #ccc;
+            background: #f9f9f9;
+            cursor: pointer;
+            border-radius: 6px;
+            font-weight: normal;
+            transition: 0.2s;
+        }
+
+        .sizes button.active {
+            font-weight: bold;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            border-color: var(--primary-color);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .action-buttons button {
+            flex: 1;
+            padding: 10px 0;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            color: white;
+        }
+
+        .wishlist {
+            background-color: #867526;
+        }
+
+        .cart {
+            background-color: #867526;
+        }
+
+        .quantity {
+            margin-top: 10px;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            font-weight: bold;
+            margin: 10px 0;
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+
+<body>
+    <div class="header-bar">
+        <a href="product_list.html"><i class="bi bi-arrow-left"></i></a>
+        <h1>Product Detail</h1>
+        <div>
+            <a href="index.html"><i class="bi bi-house"></i></a>
+            <a href="wishlist.html"><i class="bi bi-bag-heart"></i></a>
+            <a href="cart.html"><i class="bi bi-cart2"></i></a>
+        </div>
+    </div>
+    <div id="product-detail"></div>
+
+    <script>
+        const products = [
+            { name: "White T-Shirt", category: "Top", size: "S-M-L-XL", price: 59.90, image: "photo/white_tshirt.AVIF", description: "A classic white T-shirt made of 100% cotton. Comfortable and versatile for any casual outfit." },
+            { name: "Men's Bomber Jacket", category: "Outerwear", size: "S-M-L-XL", price: 249.00, image: "photo/mens_jacket.WEBP", description: "Stylish bomber jacket with zipper closure and multiple pockets. Ideal for casual or semi-formal wear." },
+            { name: "Men's Jean", category: "Bottom", size: "S-M-L-XL", price: 188.10, image: "photo/men_jean.WEBP", description: "Durable denim jeans with a modern slim fit. Perfect for daily wear or weekend outings." },
+            { name: "Men's Hiking Boots", category: "Footwear", size: "5-6-7-8-9-10", price: 339.99, image: "photo/hiking_boot.JPG", description: "Rugged hiking boots designed for outdoor adventures. Waterproof, comfortable, and durable." },
+            { name: "Men's Running Shoes", category: "Footwear", size: "5-6-7-8-9-10", price: 299, image: "photo/running_shoes.AVIF", description: "Lightweight running shoes that provide excellent cushioning and support for all-day comfort." },
+            { name: "Men's Bucket Hat", category: "Headwear", size: "One Size", price: 64.50, image: "photo/bucket_hat.WEBP", description: "Trendy bucket hat to protect you from the sun. Perfect for casual outdoor activities." },
+            { name: "Summer Dress", category: "Dress", size: "S-M-L-XL", price: 114.00, image: "photo/summer_dress.WEBP", description: "Flowy summer dress made with breathable fabric. Elegant and comfortable for warm days." },
+            { name: "Women's Knitted Cardigan", category: "Top", size: "S-M-L-XL", price: 155.99, image: "photo/cardigan.JPG", description: "Soft knitted cardigan perfect for layering. Stylish and cozy for both casual and office wear." },
+            { name: "Women's Jean", category: "Bottom", size: "S-M-L-XL", price: 179.90, image: "photo/women_jean.WEBP", description: "High-quality denim jeans with a comfortable fit. Ideal for everyday wear and casual outings." },
+            { name: "Blue Short Skirt", category: "Bottom", size: "S-M-L-XL", price: 249.60, image: "photo/short_skirt.WEBP", description: "Chic blue short skirt perfect for summer. Lightweight and easy to style for any occasion." },
+            { name: "Women's Sneakers", category: "Footwear", size: "36-37-38-39-40-41-42", price: 190.99, image: "photo/women_sneaker.WEBP", description: "Trendy sneakers that provide great comfort and support. Perfect for casual wear and sports." },
+            { name: "Women's Newsboy Cap", category: "Headwear", size: "One size", price: 61.00, image: "photo/newsboy_cap.WEBP", description: "Classic newsboy cap adding style and charm. One size fits most heads comfortably." }
+        ];
+
+        const params = new URLSearchParams(window.location.search);
+        const productName = params.get("name");
+
+        const product = products.find(p => p.name === productName);
+
+        if (product) {
+            const container = document.getElementById("product-detail");
+
+            let sizeButtons = "";
+            if (product.size) {
+                let sizes = [];
+                if (product.size.toLowerCase().includes("one")) {
+                    sizes = [product.size]; // One Size
+                } else if (product.size.includes('-')) {
+                    sizes = product.size.split('-');
+                } else {
+                    sizes = [product.size];
+                }
+
+                sizeButtons = sizes.map(size => `<button onclick="selectSize(this)">${size}</button>`).join('');
+            }
+
+            container.innerHTML = `
+                <div class="product-box">
+                    <div class = "product_info">
+                    <img src="${product.image}" alt="${product.name}" style="max-width:250px; border-radius:8px;">
+                    <div>
+                        <h2>${product.name}</h2>
+                        <p>Category: ${product.category}</p>
+                        <p>${product.description}</p>
+                        <p class="price">RM${product.price.toFixed(2)}</p>
+                        <p>Choose Size:</p>
+                        <div class="sizes">${sizeButtons}</div>
+                        <div class="quantity">
+                            <label for="qty">Quantity:</label>
+                            <input type="number" id="qty" value="1" min="1">
+                        </div>
+                        <div class="action-buttons">
+                            <button class="wishlist" onclick="addToWishlist()">Add to Wishlist</button>
+                            <button class="cart" onclick="addToCart()">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else {
+            document.body.innerHTML = "<h2>No product found</h2>";
+        }
+
+        function selectSize(btn) {
+            document.querySelectorAll(".sizes button").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+        }
+
+        function addToWishlist() {
+            const selectedSize = document.querySelector(".sizes button.active")?.innerText;
+            if (!selectedSize) {
+                alert("Please select a size first!");
+                return;
+            }
+            const quantity = parseInt(document.getElementById("qty").value);
+
+            let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+            const existingIndex = wishlist.findIndex(item => item.name === product.name && item.size === selectedSize);
+
+            if (existingIndex >= 0) {
+                wishlist[existingIndex].quantity += quantity;
+            } else {
+                wishlist.push({
+                    name: product.name,
+                    category: product.category,
+                    price: product.price,
+                    image: product.image,
+                    description: product.description,
+                    size: selectedSize,
+                    quantity
+                });
+            }
+            localStorage.setItem("wishlist", JSON.stringify(wishlist));
+            alert(`Added to wishlist (Size: ${selectedSize})`);
+        }
+
+        function addToCart() {
+            const selectedSize = document.querySelector(".sizes button.active")?.innerText;
+            if (!selectedSize) {
+                alert("Please select a size first!");
+                return;
+            }
+            const quantity = parseInt(document.getElementById("qty").value);
+
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const existingIndex = cart.findIndex(item => item.name === product.name && item.size === selectedSize);
+
+            if (existingIndex >= 0) {
+                cart[existingIndex].quantity += quantity;
+            } else {
+                cart.push({
+                    name: product.name,
+                    category: product.category,
+                    price: product.price,
+                    image: product.image,
+                    description: product.description,
+                    size: selectedSize,
+                    quantity
+                });
+            }
+            localStorage.setItem("cart", JSON.stringify(cart));
+            alert(`Added to cart (Size: ${selectedSize})`);
+        }
+    </script>
+</body>
+
+</html>

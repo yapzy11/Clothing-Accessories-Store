@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Clothing Accessories Store - Home/Login</title>
+        <style>
+            body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: sans-serif;
+                line-height: 1.5;
+                min-height: 100vh;
+                background: #f3f3f3;
+                flex-direction: column;
+                margin: 0;
+            }
+
+            .main {
+                background-color: #fff;
+                border-radius: 15px;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+                padding: 10px 20px;
+                transition: transform 0.2s;
+                width: 500px;
+                text-align: center;
+            }
+
+            h1 {
+                color: #867526;
+            }
+
+            label {
+                display: block;
+                width: 100%;
+                margin-top: 10px;
+                margin-bottom: 5px;
+                text-align: left;
+                color: #555;
+                font-weight: bold;
+            }
+
+            input {
+                display: block;
+                width: 100%;
+                margin-bottom: 15px;
+                padding: 10px;
+                box-sizing: border-box;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+
+            button {
+                padding: 15px;
+                border-radius: 10px;
+                margin-top: 15px;
+                margin-bottom: 15px;
+                border: none;
+                color: white;
+                cursor: pointer;
+                background-color: #333;
+                width: 100%;
+                font-size: 16px;
+            }
+
+            .wrap {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="main">
+            <h1>Clothing Accessories Store</h1>
+            <h2>Login Your Account</h2>
+
+            <form onsubmit="return login(event)">
+                <label for="first">
+                    Username:
+                </label>
+                <input type="text" id="username" name="username"
+                    placeholder="Enter Your Username" required>
+
+                <label for="password">
+                    Password:
+                </label>
+                <input type="password" id="password" name="password"
+                    placeholder="Enter Your Password" required>
+
+                <div class="wrap">
+                    <button type="submit">
+                        Login
+                    </button>
+                </div>
+            </form>
+
+            <p>Not registered?
+                <a href="register.html" style="text-decoration: none;">
+                    Create an account
+                </a>
+            </p>
+        </div>
+        <script>
+            function getCookie(name) {
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            let prefix = name + "=";
+            for (let c of ca) {
+                c = c.trim();
+                if (c.indexOf(prefix) === 0) {
+                    return c.substring(prefix.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        function login(event) {
+            event.preventDefault();
+
+            const inputUser = document.getElementById("username").value;
+            const inputPw = document.getElementById("password").value;
+
+            const savedUser = getCookie("username");
+            const savedPw = getCookie("password");
+
+            if (inputUser === savedUser && inputPw === savedPw) {
+                alert("Login successful! Welcome " + savedUser);
+
+                localStorage.setItem("username", savedUser);
+
+                window.location.href = "index.html";
+            } else {
+                alert("Invalid username or password!");
+            }
+        }
+        </script>
+
+    </body>
+</html>

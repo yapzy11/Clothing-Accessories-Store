@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Checkout</title>
+<style>
+/* 样式保持你现有左/右布局 */
+body {
+  font-family: sans-serif;
+  background: #f3f3f3;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+.container { 
+  width: 1000px; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+}
+
+.header { 
+  width: 100%; 
+  display: flex; 
+  justify-content: flex-start; 
+  margin-bottom: 15px; 
+}
+
+.back-btn { 
+  background-color: #867526; 
+  color: white; 
+  border: none; 
+  border-radius: 8px; 
+  padding: 8px 16px; 
+  font-size: 14px; 
+  cursor: pointer; 
+  transition: background-color 0.3s; 
+}
+
+.back-btn:hover { 
+  background-color: #a28836; 
+}
+
+.checkout-container {
+ display: flex; 
+ width: 100%; 
+ gap: 20px; 
+}
+
+.left, .right { 
+  background: #fff; 
+  border-radius: 15px; 
+  padding: 20px; 
+  box-shadow: 0 0 20px rgba(0,0,0,0.2); 
+}
+
+.left { 
+  flex: 1.2; 
+}
+
+.right { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+}
+
+h2 { 
+  color: #867526; 
+  margin-bottom: 15px; 
+}
+
+form label { 
+  display: block; 
+  margin: 5px 0 5px; 
+  font-weight: bold; 
+}
+
+form input, form select { 
+  width: 95%; 
+  padding: 10px; 
+  border-radius: 8px; 
+  border: 1px solid #ccc; 
+  margin-bottom: 12px; 
+  font-size: 14px; 
+}
+
+table { 
+  width: 100%; 
+  border-collapse: collapse; 
+}
+
+th, td { 
+  border: 1px solid #ddd; 
+  padding: 10px; 
+  text-align: center; 
+}
+
+img { 
+  width: 60px; 
+  height: auto; 
+  border-radius: 5px; 
+}
+
+.summary { 
+  border: 1px solid #ddd; 
+  border-radius: 10px; 
+  padding: 15px; 
+  background: #fafafa;
+   margin-top: 15px; 
+  }
+
+.summary-row {
+  display: flex; 
+  justify-content: space-between;
+  margin: 8px 0; 
+}
+
+#placeOrder { 
+  padding: 15px; 
+  border-radius: 10px;
+  margin-top: 10px; 
+  border: none; color: white;
+  cursor: pointer;
+  width: 100%; 
+  font-size: 16px; 
+  background-color: #333; 
+  transition: background-color 0.3s; 
+}
+
+#placeOrder:hover { 
+  background-color: #555; 
+}
+
+.note { 
+  font-size: 12px; 
+  color: #555; 
+  margin-top: 5px; 
+  }
+
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <button class="back-btn" onclick="history.back()">← Back</button>
+  </div>
+
+  <div class="checkout-container">
+    <div class="left">
+      <h2>Billing Information</h2>
+      <form id="checkoutForm">
+        <label>Full Name *</label>
+        <input type="text" id="fullName" required>
+
+        <label>Email *</label>
+        <input type="text" id="email" required>
+
+        <label>Phone *</label>
+        <input type="text" id="phone" required>
+
+        <label>Address Line 1 *</label>
+        <input type="text" id="address1" required>
+
+        <label>Address Line 2 (Optional)</label>
+        <input type="text" id="address2">
+
+        <label>Zip Code *</label>
+        <input type="text" id="zip" required>
+
+        <label>State *</label>
+        <input type="text" id="state" required>
+
+        <label>Payment Method *</label>
+        <select id="payment" required>
+          <option value="">-- Select --</option>
+          <option value="card">Credit/Debit Card</option>
+          <option value="bank">Online Banking</option>
+          <option value="ewallet">E-Wallet</option>
+          <option value="cod">Cash on Delivery</option>
+        </select>
+      </form>
+    </div>
+
+    <div class="right">
+      <h2>Order Summary</h2>
+      <div id="orderItems"></div>
+
+      <div class="summary">
+        <div class="summary-row"><strong>Subtotal:</strong> <span id="subtotalAmount">RM 0.00</span></div>
+        <div class="summary-row"><strong>Shipping Fee:</strong> <span id="shippingFee">RM 0.00</span></div>
+        <div class="summary-row"><strong>Total:</strong> <span id="totalAmount">RM 0.00</span></div>
+        <p class="note">* Orders above RM400 enjoy free shipping.</p>
+        <button id="placeOrder">Place Order</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+let selectedItems = JSON.parse(localStorage.getItem("checkoutItems")) || [];
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+if (selectedItems.length === 0) {
+  alert("No items selected for checkout.");
+  history.back();
+}
+
+
+function renderOrder() {
+  let subtotal = 0;
+  let html = `<table>
+    <tr><th>Image</th><th>Item</th><th>Size</th><th>Price</th><th>Qty</th></tr>`;
+  selectedItems.forEach(item => {
+    subtotal += item.price * item.quantity;
+    html += `<tr>
+      <td><img src="${item.image}" alt="${item.name}"></td>
+      <td>${item.name}</td>
+      <td>${item.size}</td>
+      <td>RM ${item.price}</td>
+      <td>${item.quantity}</td>
+    </tr>`;
+  });
+  html += `</table>`;
+  document.getElementById("orderItems").innerHTML = html;
+
+  let shipping = subtotal >= 400 ? 0 : 10;
+  let total = subtotal + shipping;
+
+  document.getElementById("subtotalAmount").textContent = "RM " + subtotal.toFixed(2);
+  document.getElementById("shippingFee").textContent = "RM " + shipping.toFixed(2);
+  document.getElementById("totalAmount").textContent = "RM " + total.toFixed(2);
+}
+
+
+function validateForm() {
+  let name = document.getElementById("fullName").value.trim();
+  let email = document.getElementById("email").value.trim();
+  let phone = document.getElementById("phone").value.trim();
+  let address1 = document.getElementById("address1").value.trim();
+  let zip = document.getElementById("zip").value.trim();
+  let state = document.getElementById("state").value.trim();
+  let payment = document.getElementById("payment").value;
+
+  if (!name || !email || !phone || !address1 || !zip || !state || !payment) {
+    alert("All required fields must be filled in.");
+    return false;
+  }
+  let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailPattern.test(email)) { alert("Invalid email."); return false; }
+  if (!/^[0-9]+$/.test(phone)) { alert("Phone must be numeric."); return false; }
+  if (!/^[0-9]+$/.test(zip)) { alert("Zip must be numeric."); return false; }
+  if (!/^[A-Za-z\s]+$/.test(state)) { alert("State must contain letters only."); return false; }
+  return true;
+}
+
+
+document.getElementById("placeOrder").addEventListener("click", () => {
+  if (!validateForm()) return;
+
+  const orderData = {
+    billing: {
+      name: document.getElementById("fullName").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      phone: document.getElementById("phone").value.trim(),
+      address1: document.getElementById("address1").value.trim(),
+      address2: document.getElementById("address2").value.trim(),
+      zip: document.getElementById("zip").value.trim(),
+      state: document.getElementById("state").value.trim(),
+      payment: document.getElementById("payment").value
+    },
+    items: selectedItems
+  };
+
+
+  fetch("https://jsonplaceholder.typicode.com/posts", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(orderData)
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert("Order placed successfully");
+
+    selectedItems.forEach(sel => {
+      cart = cart.filter(item => !(item.name === sel.name && item.size === sel.size));
+    });
+    localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.removeItem("checkoutItems");
+    window.location.href = "index.html";
+  })
+  .catch(err => {
+    alert("Failed to place order. Try again.");
+    console.error(err);
+  });
+});
+
+renderOrder();
+</script>
+</body>
+</html>

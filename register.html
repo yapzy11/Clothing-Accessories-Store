@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Clothing Accessories Store - Home/Login/Register</title>
+        <style>
+            body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: sans-serif;
+                line-height: 1.5;
+                min-height: 100vh;
+                background: #f3f3f3;
+                flex-direction: column;
+                margin: 0;
+            }
+
+            .main {
+                background-color: #fff;
+                border-radius: 15px;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+                padding: 10px 20px;
+                transition: transform 0.2s;
+                width: 500px;
+                text-align: center;
+            }
+
+            h1 {
+                color: #867526;
+            }
+
+            label {
+                display: block;
+                width: 100%;
+                margin-top: 10px;
+                margin-bottom: 5px;
+                text-align: left;
+                color: #555;
+                font-weight: bold;
+            }
+
+            input {
+                display: block;
+                width: 100%;
+                margin-bottom: 15px;
+                padding: 10px;
+                box-sizing: border-box;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+
+            .checkbox-label{
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin-top: 10px;
+            }
+
+            button {
+                padding: 15px;
+                border-radius: 10px;
+                margin-top: 15px;
+                margin-bottom: 15px;
+                border: none;
+                color: white;
+                cursor: pointer;
+                background-color: #333;
+                width: 100%;
+                font-size: 16px;
+            }
+
+            .wrap {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="main">
+            <h1>Clothing Accessories Store</h1>
+            <h2>Create Your Account</h2>
+            <form onsubmit="return saveToCookies()">
+                <label for="first">
+                    Username:
+                </label>
+                <input type="text" id="first" name="first"
+                    placeholder="Enter your Username" required>
+                <label for="email">
+                    Email:
+                </label>
+                <input type="email" id="email" name="email"
+                    placeholder="Enter your valid Email" required>
+                <label for="password">
+                    Password:
+                </label>
+                <input type="password" id="password" name="password"
+                    placeholder="Enter your Password" required>
+                <label for="comfirmpassword">
+                    Confirm Password:
+                </label>
+                <label>
+                    <input type="password" id="confirmpassword"
+                        name="confirmpassword"
+                        placeholder="Enter your Password Again" required>
+                </label>
+            <script>
+                function setCookie(name, value, days) {
+                    let expires = "";
+                    if (days) {
+                        let date = new Date();
+                        date.setTime(date.getTime() + (days*24*60*60*1000));
+                        expires = "; expires=" + date.toUTCString();
+                    }
+                    document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
+                }
+
+                function saveToCookies() {
+                    let username = document.getElementById("first").value;
+                    let email = document.getElementById("email").value;
+                    let pw = document.getElementById("password").value;
+                    let cpw = document.getElementById("confirmpassword").value;
+
+                    if (pw !== cpw) {
+                        alert("Passwords do not match!");
+                        return false;
+                    }
+
+                    setCookie("username", username, 7);
+                    setCookie("email", email, 7);
+                    setCookie("password", pw, 7);
+
+                    alert("Registration successful! Now you can login.");
+                    window.location.href = "login.html";
+                    return false;
+                }
+
+
+            </script>
+                <label for="terms" class="checkbox-label">
+                    <input type="checkbox" id="terms"
+                        style="width: 10%; margin-bottom: 1px; padding: 1px;"
+                        required>
+                    I agree to the <a href="terms.html" target="_blank">Terms
+                        and Conditions</a>
+                </label>
+
+                <div class="wrap">
+                    <button type="submit">
+                        Register
+                    </button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

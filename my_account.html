@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Account</title>
+  <style>
+    :root {
+      --primary-color: #867526;
+      --secondary-color: #f8f9fa;
+      --accent-color: #ff6b6b;
+      --text-dark: #333;
+      --text-light: #fff;
+    }
+
+    body {
+      font-family: sans-serif;
+      background: var(--secondary-color);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .account-box {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      width: 400px;
+      text-align: center;
+    }
+
+    h1 {
+      color: var(--primary-color);
+      margin-bottom: 20px;
+    }
+
+    .profile-pic {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--primary-color);
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin-top: 15px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      background: var(--primary-color);
+      color: var(--text-light);
+    }
+
+    button:hover {
+      background: #6f6320;
+    }
+  </style>
+</head>
+<body>
+  <div class="account-box">
+    <h1>My Profile</h1>
+    <img id="profileImage" class="profile-pic" src="https://via.placeholder.com/100" alt="Profile Picture">
+    <input type="file" id="imageUpload" accept="image/*">
+
+    <label for="username">Username</label>
+    <input type="text" id="username">
+
+    <label for="address">Address</label>
+    <textarea id="address" rows="3"></textarea>
+
+    <p><button onclick="saveProfile()">Save Changes</button></p>
+    <p><button class="home-btn" onclick="window.location.href='index.html'">Back to Home</button></p>
+  </div>
+
+  <script>
+    // Load saved profile from localStorage
+    const usernameInput = document.getElementById("username");
+    const addressInput = document.getElementById("address");
+    const profileImage = document.getElementById("profileImage");
+
+    const savedProfile = JSON.parse(localStorage.getItem("userProfile")) || {};
+
+    if (savedProfile.username) usernameInput.value = savedProfile.username;
+    if (savedProfile.address) addressInput.value = savedProfile.address;
+    if (savedProfile.image) profileImage.src = savedProfile.image;
+
+    // Handle profile image upload & preview
+    document.getElementById("imageUpload").addEventListener("change", function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          profileImage.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+
+  function saveProfile() {
+    const updatedProfile = {
+      username: usernameInput.value,
+      address: addressInput.value,
+      image: profileImage.src,
+      email: savedProfile.email,
+      password: savedProfile.password
+    };
+    localStorage.setItem("userProfile", JSON.stringify(updatedProfile));
+    localStorage.setItem("username", updatedProfile.username);
+    alert("Profile updated successfully!");
+  }
+
+  </script>
+</body>
+</html>
+
+
